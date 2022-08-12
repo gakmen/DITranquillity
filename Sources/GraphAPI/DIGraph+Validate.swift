@@ -127,24 +127,24 @@ extension DIGraph {
 
 // MARK: - reachibility
 extension DIGraph {
-  /// a graph is reachability if any dependency have edge on component, or optional.
+  /// a graph is reachable if any dependency has edge on component, or optional.
   private func checkGraphForReachability() -> Bool {
     var successful: Bool = true
 
-    /// Yes it's N^3 but unknown vertices it shouldn't be too much
+    /// Yes it's N^3 but there shouldn't be too many unknown vertices
     for (toIndex, vertex) in vertices.enumerated() {
       guard case .unknown(let unknownVertex) = vertex else {
         continue
       }
 
-      // By make algorith for unknown vertex can only one from vertex.
+      // Algorhythm guarantees there's only one fromVertex referencing unknownVertex
       guard let fromIndex = adjacencyList.firstIndex(where: { $0.contains { $0.toIndices.contains(toIndex) }}) else {
-        assertionFailure("Can't found from vertices for unknown vertex? it's bug in code")
+        assertionFailure("Can't find fromVertices for unknownVertex? it's a bug in code")
         continue
       }
 
       guard let (edge, _) = adjacencyList[fromIndex].first(where: { $0.toIndices.contains(toIndex) }) else {
-        assertionFailure("But in top code checked on contains")
+        assertionFailure("In code above we made sure it contains")
         continue
       }
 
